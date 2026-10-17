@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JamesKnight Poultry System</title>
+<style>
+:root{--bg:#0d1117;--panel:#161b22;--border:#30363d;--text:#c9d1d9;--muted:#8b949e;--accent:#58a6ff;--green:#3fb950;--red:#f85149;--amber:#d29922;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.6;}
+a{color:var(--accent);text-decoration:none;}
+header{display:flex;justify-content:space-between;align-items:center;padding:16px 32px;border-bottom:1px solid var(--border);background:var(--panel);position:sticky;top:0;z-index:10;}
+.brand{font-weight:700;font-size:18px;letter-spacing:.5px;}
+nav a{margin-left:16px;font-size:14px;}
+nav .cta{background:var(--accent);color:#0d1117;padding:6px 14px;border-radius:6px;font-weight:600;}
+.hero{padding:80px 32px;text-align:center;border-bottom:1px solid var(--border);}
+.hero h1{font-size:42px;font-weight:800;margin-bottom:12px;}
+.hero p{color:var(--muted);max-width:720px;margin:0 auto 24px;}
+.badge{display:inline-block;border:1px solid var(--border);padding:6px 14px;border-radius:20px;font-size:13px;color:var(--muted);background:var(--panel);}
+.section{padding:48px 32px;max-width:1100px;margin:0 auto;}
+.section h2{font-size:26px;margin-bottom:24px;border-left:3px solid var(--accent);padding-left:12px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.card img{width:100%;height:200px;object-fit:cover;background:#000;}
+.card-body{padding:16px;}
+.card h3{font-size:18px;margin-bottom:8px;}
+.tag{display:inline-block;font-size:11px;padding:3px 8px;border-radius:4px;margin-right:6px;margin-bottom:6px;background:#21262d;border:1px solid var(--border);}
+.tag.stage{color:var(--accent);}
+.tag.stock{color:var(--green);}
+.tag.limited{color:var(--amber);}
+.tag.ready{color:var(--green);}
+.card ul{list-style:none;margin-top:8px;font-size:13px;color:var(--muted);}
+.card ul li{margin-bottom:4px;}
+.price{font-size:20px;font-weight:700;margin:12px 0;color:var(--text);}
+.btn{display:inline-block;background:var(--accent);color:#0d1117;padding:8px 16px;border-radius:6px;font-weight:600;font-size:14px;border:none;cursor:pointer;}
+.btn.outline{background:transparent;color:var(--accent);border:1px solid var(--accent);}
+.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:100;}
+.modal{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:24px;width:360px;max-width:90%;}
+.modal h3{margin-bottom:16px;}
+.modal input{width:100%;padding:10px;margin-bottom:12px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);}
+.modal .row{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-size:13px;color:var(--muted);}
+.modal .sso{display:flex;gap:8px;margin-top:12px;}
+.modal .sso button{flex:1;padding:8px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--text);cursor:pointer;}
+.dev{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:24px;display:flex;gap:24px;align-items:center;flex-wrap:wrap;}
+.dev .avatar{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#58a6ff,#bc8cff);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:28px;color:#0d1117;}
+.dev .info h3{font-size:20px;margin-bottom:4px;}
+.dev .info p{color:var(--muted);font-size:14px;margin-bottom:8px;}
+.tech{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.tech span{font-size:11px;padding:3px 8px;border-radius:4px;background:#21262d;border:1px solid var(--border);color:var(--muted);}
+footer{padding:32px;text-align:center;border-top:1px solid var(--border);color:var(--muted);font-size:13px;}
+.toast{position:fixed;bottom:20px;right:20px;background:var(--panel);border:1px solid var(--border);padding:12px 16px;border-radius:8px;display:none;}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">JamesKnight Poultry System</div>
+  <nav>
+    <a href="#products">Inventory</a>
+    <a href="#advisor">Advisor</a>
+    <a href="#developer">Developer</a>
+    <span id="authArea"><a href="#" onclick="openLogin();return false;">Log In</a> <a href="#" class="cta" onclick="openLogin();return false;">Register / Sign Up</a></span>
+  </nav>
+</header>
+
+<section class="hero">
+  <h1>JamesKnight Poultry System</h1>
+  <p>More than poultry—a legacy of elegance, heritage, and pure grace in every feather.</p>
+  <span class="badge">Hand-raised Chinese Silkies • Selected for Quality & Vitality by JamesKnight Poultry System</span>
+</section>
+
+<section class="section" id="products">
+  <h2>Chinese Silkie Inventory</h2>
+  <div class="grid" id="productGrid"></div>
+</section>
+
+<section class="section" id="advisor">
+  <h2>Customer Advisor</h2>
+  <div class="card" style="padding:16px;">
+    <p style="color:var(--muted);font-size:14px;margin-bottom:12px;">Select your goal to get a recommended age variant.</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="btn outline" onclick="advise('laying')">Immediate Egg Laying</button>
+      <button class="btn outline" onclick="advise('budget')">Budget Flock Building</button>
+      <button class="btn outline" onclick="advise('show')">Show / Exhibition</button>
+      <button class="btn outline" onclick="advise('pet')">Backyard Pet</button>
+    </div>
+    <p id="advice" style="margin-top:16px;font-weight:600;"></p>
+  </div>
+</section>
+
+<section class="section" id="developer">
+  <h2>Developer Profile</h2>
+  <div class="dev">
+    <div class="avatar">JK</div>
+    <div class="info">
+      <h3>JamesKnight</h3>
+      <p>Fresh BSIT Graduate • Web Designer</p>
+      <p>Perseverance • Continuous Learning</p>
+      <div class="tech">
+        <span>HTML</span><span>CSS</span><span>JavaScript</span><span>Web Design</span><span>BSIT</span>
+      </div>
+      <p style="margin-top:8px;font-size:13px;"><a href="https://github.com/JKnight27" target="_blank">github.com/JKnight27</a> • activatedknight765@gmail.com</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Bred with care, raised with honor—bringing world-class heritage poultry from JamesKnight Poultry System to your flock.</p>
+</footer>
+
+<div class="modal-backdrop" id="modal">
+  <div class="modal">
+    <h3>Log In to JamesKnight Poultry System</h3>
+    <input type="text" placeholder="Email / Username" id="u">
+    <input type="password" placeholder="Password" id="p">
+    <div class="row"><label><input type="checkbox"> Remember Me</label><a href="#">Forgot?</a></div>
+    <button class="btn" style="width:100%" onclick="doLogin()">Log In</button>
+    <div class="sso">
+      <button onclick="toast('Google login')">Google</button>
+      <button onclick="toast('Apple login')">Apple</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const products=[
+ {name:"4 Months Old Chinese Silkie",stage:"16W",img:"Chicken Picture/4 months old.jpg",profile:"Silver/Blue plumage, turquoise earlobes, dark comb/wattles, feathered shanks.",stock:"Active / In Stock",stockClass:"stock",use:"Flock integration, juvenile raising, custom breeding.",price:"₱1,200",chars:["Fluffy fur-like down feathers","Dark blue/black skin & bones","Distinctive 5-toed feet","Near point-of-lay (20–24 wks)"]},
+ {name:"5 Months Old Chinese Silkie",stage:"20W",img:"Chicken Picture/5 months old.jpg",profile:"Dense charcoal/grey fluffy down, full rounded crest, compact body, walnut comb emerging.",stock:"High Demand / Limited Stock",stockClass:"limited",use:"Egg production starter, backyard pet, premium breeding.",price:"₱1,600",chars:["First eggs ~20–24 wks; abdomen widens","Cockerels crow; streamer crest","Full plumage density hides dark skin","Cold-hardy down"]},
+ {name:"6 Months Old Chinese Silkie",stage:"24W",img:"Chicken Picture/6 months old.jpg",profile:"Pure silk-white pom-pom plumage, developed crest & beard, black skin/legs, solid adult stance.",stock:"Ready for Dispatch",stockClass:"ready",use:"Direct egg harvesting, breeding programs, show/exhibition.",price:"₱2,000",chars:["Lays 3–4 cream eggs/week","Hens: round pom-pom crest; Roosters: mulberry comb","Max adult weight 2–4.5 lbs","Broodiness begins"]}
+];
+const grid=document.getElementById('productGrid');
+products.forEach(p=>{
+  const c=document.createElement('div');c.className='card';
+  c.innerHTML=`<img src="${p.img}" alt="${p.name}"><div class="card-body">
+    <h3>${p.name}</h3>
+    <span class="tag stage">[POULTRY-STAGE: ${p.stage}]</span><span class="tag ${p.stockClass}">${p.stock}</span>
+    <p style="font-size:13px;color:var(--muted);margin:8px 0;">${p.profile}</p>
+    <ul>${p.chars.map(x=>`<li>• ${x}</li>`).join('')}</ul>
+    <p style="font-size:12px;color:var(--muted);margin-top:8px;">Use: ${p.use}</p>
+    <div class="price">${p.price}</div>
+    <button class="btn" onclick="toast('Added ${p.name}')">Add to Cart</button>
+  </div>`;
+  grid.appendChild(c);
+});
+function openLogin(){document.getElementById('modal').style.display='flex';}
+document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')e.target.style.display='none';});
+function doLogin(){const u=document.getElementById('u').value||'User';document.getElementById('modal').style.display='none';
+  document.getElementById('authArea').innerHTML=`<span style="color:var(--muted);font-size:14px;">Welcome back to JamesKnight Poultry System, ${u}!</span> <a href="#" onclick="logout();return false;" style="color:var(--red);font-weight:600;">Log Out</a>`;
+  toast('Logged in');}
+function logout(){document.getElementById('authArea').innerHTML=`<a href="#" onclick="openLogin();return false;">Log In</a> <a href="#" class="cta" onclick="openLogin();return false;">Register / Sign Up</a>`;toast('You have been successfully logged out of JamesKnight Poultry System.');}
+function advise(g){const m={laying:'Recommended: 6 Months Old Chinese Silkie (Mature Breeder) for immediate egg laying.',budget:'Recommended: 4 Months Old Chinese Silkie (Grower Stage) for budget flock building.',show:'Recommended: 6 Months Old Chinese Silkie (Mature Breeder) for show/exhibition.',pet:'Recommended: 5 Months Old Chinese Silkie (Point-of-Lay) for backyard pet.'};document.getElementById('advice').textContent=m[g];}
+function toast(t){const e=document.getElementById('toast');e.textContent=t;e.style.display='block';setTimeout(()=>e.style.display='none',2500);}
+</script>
+</body>
+</html>
